@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>ControlSlider.qml</file>
+        <file>ThresholdSlider.qml</file>
+        <file>ImageScrollArea.qml</file>
+        <file>icons/chart.png</file>
+        <file>icons/csv.png</file>
+        <file>icons/icons8_info_80px.png</file>
+        <file>icons/icons8_one_to_one_80px_1.png</file>
+        <file>icons/icons8_tangent_80px.png</file>
+        <file>icons/new.png</file>
+        <file>icons/open.png</file>
+        <file>icons/save.png</file>
+        <file>icons/settings.png</file>
+        <file>icons/zoom_in.png</file>
+        <file>icons/zoom_out.png</file>
+        <file>icons/toggle.png</file>
+        <file>icons/zoom_reset.png</file>
+        <file>icons/reset_icon.png</file>
+        <file>icons/reset.png</file>
+        <file>icons/screenshot.png</file>
+    </qresource>
+</RCC>
