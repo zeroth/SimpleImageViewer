@@ -45,8 +45,8 @@ add_custom_command(TARGET LocalTiffIO
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy  ${TIFF_LIBRARY_DIR}/tiff.dll "${CMAKE_CURRENT_BINARY_DIR}/../../Viewer2D"
 )
-add_custom_command(TARGET LocalTiffIO
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy  ${TIFF_LIBRARY_DIR}/tiff.dll "${CMAKE_CURRENT_BINARY_DIR}/../../ImageIOTest"
-)
+#add_custom_command(TARGET LocalTiffIO
+#    POST_BUILD
+#    COMMAND ${CMAKE_COMMAND} -E copy  ${TIFF_LIBRARY_DIR}/tiff.dll "${CMAKE_CURRENT_BINARY_DIR}/../../ImageIO"
+#)
 ENDIF()

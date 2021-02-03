@@ -10,7 +10,29 @@ BioImageProvider::BioImageProvider()
     this->name = "Something";
 }
 
-QImage BioImageProvider::requestImage(const QString &id, QSize *size, const QSize &)
+QImage BioImageManager::requestImage(const QString &id, QSize *size, const QSize &/*requestedSize*/)
+{
+
+    // Bi/img/{imageid}/t/{time_point}/c/{channel}/z/{page_number}/tmin/{threshold_min}/tmax/{threshold_min}/cmap/{colormapname}
+    QStringList idSplit = id.split('/');
+    QString imageId = idSplit.contains("img") ? idSplit.at(idSplit.indexOf("img")+1) : "";
+
+    if(imageId == "") {
+        return QImage();
+    }
+    zeroth::BioImage* img = BioImageManager::instance().image(imageId);
+    if(!img) {
+        return QImage();
+    }
+    // TODO: Improve the BioImage loading to load only require page
+    QString colorMap = idSplit.contains("cmap") ?idSplit.at(idSplit.indexOf("cmap")+1): "Greys";
+    double min = idSplit.contains("min") ? idSplit.at(idSplit.indexOf("min")+1).toDouble(): BioImageManager::instance().imgMin(imageId);
+    double max = idSplit.contains("max") ? idSplit.at(idSplit.indexOf("max")+1).toDouble(): BioImageManager::instance().imgMax(imageId);
+    bool threshold = idSplit.contains("t") ?idSplit.at(idSplit.indexOf("t")+1).toInt(): 0;
+
+}
+
+/*QImage BioImageProvider::requestImage(const QString &id, QSize *size, const QSize &)
 {
     // find the parametors
 
@@ -48,5 +70,5 @@ QImage BioImageProvider::requestImage(const QString &id, QSize *size, const QSiz
     qImg.save("D:\\test_bioimg.png");
 
     return qImg;
-}
+}*/
 
