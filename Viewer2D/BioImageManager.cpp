@@ -327,10 +327,10 @@ BioImageManager::BioImageManager(QObject *parent) : QObject(parent)
     copperMap[{1}] = rgb(255, 199, 127);
     cTable->registerMap("Copper", copperMap);
 
-    std::map<FloatKey, rgb> greysMap;
-    greysMap[{0}] = rgb(0, 0, 0);
-    greysMap[{1}] = rgb(255, 255, 255);
-    cTable->registerMap("Greys", greysMap);
+    std::map<FloatKey, rgb> graysMap;
+    graysMap[{0}] = rgb(0, 0, 0);
+    graysMap[{1}] = rgb(255, 255, 255);
+    cTable->registerMap("Grays", graysMap);
 
     std::map<FloatKey, rgb> yignbuMap;
     yignbuMap[{0}] = rgb(8, 29, 88);

@@ -18,7 +18,7 @@ ColorTable::ColorTable(float alphaVal[2], int step)
         gColorTable[i] = qRgb(i, i, i);
     }
     graysColorTable = gColorTable;
-    m_colorTable["Greys"] = gColorTable;
+    m_colorTable["Grays"] = gColorTable;
 
 }
 

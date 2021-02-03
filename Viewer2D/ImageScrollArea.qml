@@ -2,18 +2,20 @@ import QtQuick 2.0
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Dialogs 1.2
+import BioImages 1.0
 
 Item {
     id: rootImageScrollArea
 
     property alias zoomController: zoomSlider
-    property string imageSrc: ""
+    property int imageSrc: -1
     property real zoomScale: 1.0
     property var controlAlignment: Qt.AlignLeft
     property var stackIndex: 0
-
+//    property int currentImageIndex: 0
 
     clip: true
+
     Rectangle {
         id: imageContainer
         Image {
@@ -33,7 +35,8 @@ Item {
             onPositionChanged: {
                 let x = Math.round(mouse.x);
                 let y = Math.round(mouse.y);
-                let val = Manager.intensity(imageSrc, x, y, stackSlider.value);
+                let val = Manager.intensityAt(imageSrc, x, y, stackSlider.value);
+//                  let val = Manager.intensityAt(imageSrc, x, y, 0);
                 //                let posInfo = ` X: ${x}, Y: ${y},  Value: ${val}`;
                 localtionInfo.xPos = x;
                 localtionInfo.yPos = y;
@@ -89,12 +92,13 @@ Item {
     }
 
     onImageSrcChanged: {
-        thresholdSlider.from = Manager.imgMin(imageSrc)
-        thresholdSlider.first.value = Manager.imgMin(imageSrc)
-        thresholdSlider.to = Manager.imgMax(imageSrc)
-        thresholdSlider.second.value = Manager.imgMax(imageSrc)
+        console.log("Image Src changed : ", imageSrc)
+        thresholdSlider.from = Manager.min(imageSrc)
+        thresholdSlider.first.value = Manager.min(imageSrc)
+        thresholdSlider.to = Manager.max(imageSrc)
+        thresholdSlider.second.value = Manager.max(imageSrc)
 
-        let imageLength = Manager.imgLength(imageSrc)
+        let imageLength = Manager.length(imageSrc);
         stackSlider.visible =  imageLength > 1
         stackSlider.from = 0
         stackSlider.to = imageLength-1
@@ -105,9 +109,13 @@ Item {
     }
 
     function updateImage() {
-        var imageUrl = `image://Bi/img/${imageSrc}/cmap/${colorMapCmb.currentText}/min/${thresholdSlider.first.value}/max/${thresholdSlider.second.value}/t/1/s/${stackSlider.value}`;
+//        var imageUrl = `image://Bi/img/${imageSrc}/cmap/${colorMapCmb.currentText}/min/${thresholdSlider.first.value}/max/${thresholdSlider.second.value}/t/1/s/${stackSlider.value}`;
+        // Bi/{imageid}/{time_point}/{channel}/{page_number_z}/{threshold_min}/{threshold_min}/{colormapname}
+        var imageUrl = `image://Bi/${imageSrc}/0/non/${stackSlider.value}/${thresholdSlider.first.value}/${thresholdSlider.second.value}/${colorMapCmb.currentText}`
+//        var imageUrl = `image://Bi/${imageSrc}/0/non/0/${thresholdSlider.first.value}/${thresholdSlider.second.value}/${colorMapCmb.currentText}`
         image.source = ""
         image.source = imageUrl;
+        console.log("current image url ", imageUrl)
     }
 
     function updateImageLocation() {
@@ -129,12 +137,14 @@ Item {
             to: 100
             title: "Stack Slider"
             orientation: Qt.Vertical
-            onMoved: updateImage()/* {
-                stackIndex = value
-            }*/
-            onValueChanged: updateImage()/*{
-                stackIndex = value
-            }*/
+            onMoved: updateImage()
+            //{
+            //    stackIndex = value
+            //}
+            onValueChanged: updateImage()
+            //{
+            //    stackIndex = value
+            //}
 
         }
 
@@ -206,7 +216,7 @@ Item {
             }
 
             function updateDefaultSelection() {
-                colorMapCmb.currentIndex = colorMapCmb.find("Greys", Qt.MatchExactly)
+                colorMapCmb.currentIndex = colorMapCmb.find("Grays", Qt.MatchExactly)
             }
 
             Component.onCompleted:  updateDefaultSelection()

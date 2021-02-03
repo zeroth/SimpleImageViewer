@@ -4,6 +4,7 @@
 #include <limits>
 #include <QImage>
 #include <QDebug>
+#include <QJsonObject>
 
 namespace zeroth {
 struct BioImageData {
@@ -505,6 +506,40 @@ float BioImage::intensityAt(int index) const
 float BioImage::operator()(int x, int y, int z) const
 {
     return this->intensityAt(x, y, z);
+}
+
+QJsonObject BioImage::imageInfo(const QString &path)
+{
+    zeroth::TiffReader reader = zeroth::TiffReader(path.toStdString());
+    QJsonObject imgInfo;
+    imgInfo.insert("width", int(reader.width()));
+    imgInfo.insert("height", int(reader.height()));
+    imgInfo.insert("length", int(reader.numberofSlices()));
+    return imgInfo;
+}
+
+QString BioImage::dtypeToString(DataType type)
+{
+    switch (type) {
+    case UINT8:
+        return "UINT8";
+    case INT8:
+        return "INT8";
+    case UINT16:
+        return "UINT16";
+    case INT16:
+        return "INT16";
+    case UINT32:
+        return "UINT32";
+    case INT32:
+        return "INT32";
+    case FLOAT:
+        return "FLOAT";
+
+    default :
+        return "NOT Define";
+
+    }
 }
 
 }

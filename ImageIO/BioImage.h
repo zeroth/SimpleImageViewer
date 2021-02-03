@@ -32,13 +32,13 @@ public:
     
     void update();
 
-    uint32_t width() const;
+    Q_INVOKABLE uint32_t width() const;
     void setWidth(uint32_t);
 
-    uint32_t height() const;
+    Q_INVOKABLE uint32_t height() const;
     void setHeight(uint32_t );
 
-    uint32_t length() const;
+    Q_INVOKABLE uint32_t length() const;
     void setLength(uint32_t);
 
     zeroth::DataType dtype() const;
@@ -48,8 +48,8 @@ public:
     
     // uint32_t byteSize() const;
 
-    double min() const;
-    double max() const;
+    Q_INVOKABLE double min() const;
+    Q_INVOKABLE double max() const;
 
     void *data();
 //    void setData(void* data);
@@ -66,9 +66,12 @@ public:
 
     void displayImage(QImage* image, int pageIndex=0, float thresholdMin = 0, float thresholdMax = 0, bool threshold=false);
 
-    float intensityAt(int x, int y, int z=0) const;
-    float intensityAt(int index) const;
+    Q_INVOKABLE float intensityAt(int x, int y, int z=0) const;
+    Q_INVOKABLE float intensityAt(int index) const;
     float operator()(int x, int y, int z=0) const;
+
+    static QJsonObject imageInfo(const QString& path);
+    static QString dtypeToString(zeroth::DataType type);
 
     /*uint32_t operator()(uint32_t x, uint32_t y, uint32_t z) const;
 

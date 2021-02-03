@@ -11,6 +11,7 @@
 #include <QApplication>
 #include <QQuickView>
 #include <QQmlDebuggingEnabler>
+#include "ImageManager.h"
 
 
 int main(int argc, char *argv[])
@@ -46,7 +47,9 @@ int main(int argc, char *argv[])
     qmlView.engine()->addImageProvider("Bi", new BioImageProvider);
     qmlView.engine()->rootContext()->setContextProperty("app", &app);
     qmlView.engine()->rootContext()->setContextProperty("qmlWindow", &qmlView);
-    qmlView.engine()->rootContext()->setContextProperty("Manager", &BioImageManager::instance());
+//    qmlView.engine()->rootContext()->setContextProperty("Manager", &BioImageManager::instance());
+        qmlView.engine()->rootContext()->setContextProperty("Manager", &ImageManager::instance());
+//    qmlView.engine()->rootContext()->setContextProperty("tmpBioImage", new zeroth::BioImage());
     qmlView.setResizeMode(QQuickView::SizeRootObjectToView);
     qmlView.setSource(QUrl("qrc:/main.qml"));
     qmlView.setMinimumSize(QSize(1366, 768));

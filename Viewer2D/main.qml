@@ -15,8 +15,8 @@ Rectangle {
     visible: true
     width: 1200
     height: 800
-//    color: "red"
-    property string imageSrc: ""
+    //    color: "red"
+    property int imageSrc: -1
     ToolBar {
         id: toolBar
         anchors.top: parent.top
@@ -41,6 +41,48 @@ Rectangle {
         }
     }
 
+    Rectangle{
+        y: (parent.height / 2) - (height/2)
+        x: 0
+        id: imageScroller
+        width: 100
+        height: parent.height * 0.8
+        color: "lightGray"
+        ListView  {
+            anchors.fill: parent
+            anchors.margins: 2
+            clip: true
+            spacing: 2
+            model: Manager
+            delegate: Rectangle {
+                color: "gray"
+                width: imageScroller.width
+                height: 100
+                Image {
+                    id: img
+                    source: `image://Bi/${index}/0/nan/0/nan/nan/Grays`
+                    width: parent.width
+                    height: 85
+                    sourceSize.width: parent.width
+                    sourceSize.height: 85
+                    anchors.top: parent.top
+                }
+                Text {
+                    id: title
+                    text: bioImgName
+                    anchors.top: img.bottom
+                    color: "white"
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        appRoot.imageSrc = index
+                    }
+                }
+            }
+
+        }
+    }
     Rectangle {
         id: leftRect
         color: "transparent"
@@ -48,7 +90,7 @@ Rectangle {
         anchors.top:toolBar.bottom
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.left: parent.left
+        anchors.left: imageScroller.right
 
 
         ImageScrollArea {
@@ -70,6 +112,7 @@ Rectangle {
         selectFolder: false
         onAccepted: {
             var currentImageId = Manager.addImage(fileUrl);
+            console.log("Current Image id ", currentImageId)
             appRoot.imageSrc = currentImageId;
         }
     }
