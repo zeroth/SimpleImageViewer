@@ -30,10 +30,12 @@ int main(int argc, char *argv[])
 //    qmlRegisterType<zeroth::Histogram>("BioImages", 1,0, "Histogram");
 //    qmlRegisterType<DataModel>("BioImages", 1, 0, "DataModel");
 
-    /*QQmlApplicationEngine engine;
+    QQmlApplicationEngine engine;
     engine.addImageProvider("Bi", new BioImageProvider);
     engine.rootContext()->setContextProperty("app", &app);
-    engine.rootContext()->setContextProperty("Manager", &BioImageManager::instance());
+    engine.rootContext()->setContextProperty("Manager", &ImageManager::instance());
+    engine.addImageProvider("Bi", new BioImageProvider);
+
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
@@ -41,9 +43,9 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-    engine.load(url);*/
+    engine.load(url);
 
-    QQuickView qmlView;
+   /* QQuickView qmlView;
     qmlView.engine()->addImageProvider("Bi", new BioImageProvider);
     qmlView.engine()->rootContext()->setContextProperty("app", &app);
     qmlView.engine()->rootContext()->setContextProperty("qmlWindow", &qmlView);
@@ -54,7 +56,7 @@ int main(int argc, char *argv[])
     qmlView.setSource(QUrl("qrc:/main.qml"));
     qmlView.setMinimumSize(QSize(1366, 768));
     qmlView.showMaximized();
-    qmlView.show();
+    qmlView.show();*/
 
     return app.exec();
 

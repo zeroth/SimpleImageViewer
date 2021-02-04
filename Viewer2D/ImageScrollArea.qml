@@ -122,7 +122,48 @@ Item {
         imageContainer.x =  (rootImageScrollArea.width/2) - (image.width / 2)
         imageContainer.y = (rootImageScrollArea.height/2) - (image.height / 2)
     }
+    Rectangle{
+        y: (parent.height / 2) - (height/2)
+        x: 0
+        id: imageScroller
+        width: 100
+        height: parent.height * 0.8
+        color: "lightGray"
+        ListView  {
+            anchors.fill: parent
+            anchors.margins: 2
+            clip: true
+            spacing: 2
+            model: Manager
+            delegate: Rectangle {
+                color: "gray"
+                width: imageScroller.width
+                height: 100
+                Image {
+                    id: img
+                    source: `image://Bi/${index}/0/nan/0/nan/nan/Grays`
+                    width: parent.width
+                    height: 85
+                    sourceSize.width: parent.width
+                    sourceSize.height: 85
+                    anchors.top: parent.top
+                }
+                Text {
+                    id: title
+                    text: bioImgName
+                    anchors.top: img.bottom
+                    color: "white"
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        rootImageScrollArea.imageSrc = index
+                    }
+                }
+            }
 
+        }
+    }
 
     ColumnLayout {
         x: parent.width - 50
