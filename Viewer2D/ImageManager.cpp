@@ -3,6 +3,7 @@
 #include <QList>
 #include <QUrl>
 #include <QDebug>
+#include "Anisotropy.h"
 
 ImageManager::ImageManager(QObject *parent) : QAbstractListModel(parent)
 {
@@ -536,14 +537,14 @@ QVariant ImageManager::data(const QModelIndex &index, int role) const
             return QVariant();
 
         const QFileInfo fi = m_layers.at(index.row());
-        qDebug() << index.row() << fi;
+//        qDebug() << index.row() << fi;
         switch(role)
         {
         case Qt::DisplayRole:
-        case BioImgPath:
-            return fi.absoluteFilePath();
         case BioImgName:
             return fi.fileName();
+        case BioImgPath:
+            return fi.absoluteFilePath();
         case BioImgIsTimeSeries:
             return fi.isDir();
         // TODO: if it's timeSeries send the list of all the files init
@@ -581,6 +582,14 @@ zeroth::BioImage *ImageManager::imageAt(int row)
     return imageCache.value(row, nullptr);
 }
 
+QString ImageManager::imagePathAt(int row) const
+{
+    const QModelIndex idx = this->index(row);
+    if(!idx.isValid()) return nullptr;
+    QString path = this->data(idx, BioImgPath).toString();
+    return path;
+}
+
 
 QStringList ImageManager::availableColorMaps()
 {
@@ -590,4 +599,16 @@ QStringList ImageManager::availableColorMaps()
 QVector<QRgb> ImageManager::colorTable(const QString &name)
 {
     return cTable->colorTable(name);
+}
+
+void ImageManager::exeAnisotropy(const QString &parallelBackGround, const QString &perpendicularBackground,
+                                    const QString &parallel, const QString &perpendicular, double subtractVal)
+{
+    Anisotropy* ani = new Anisotropy;
+    ani->setParallelBackground(parallelBackGround);
+    ani->setPerpendicularBackground(perpendicularBackground);
+    ani->setParallel(parallel);
+    ani->setPerpendicular(perpendicular);
+    ani->setSubtractVal(subtractVal);
+    ani->apply();
 }

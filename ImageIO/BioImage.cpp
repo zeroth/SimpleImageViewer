@@ -42,14 +42,41 @@ struct BioImageData {
         */
         return (T)(( (number-min)/(max-min) ) * (double)std::numeric_limits<T>::max());
     }
+
+    template<typename T>
+    double calculateMin() {
+        T smallest = ((T*)buffer)[0];
+        T largest = ((T*)buffer)[0];
+
+        qDebug() << "Image size " << imageSize;
+        qDebug() << "smallest  init " << smallest;
+        for(int i =1; i < imageSize; i++) {
+            if(((T*)buffer)[i] < smallest) {
+                smallest = ((T*)buffer)[i];
+                qDebug() << "new small " << smallest;
+            }
+            else if (((T*)buffer)[i] > largest) {
+                largest = ((T*)buffer)[i];
+            }
+//            else if(largest < (double)((T)buffer[i])) {
+//                largest  = (double)((T)buffer[i]);
+//            }
+//            qDebug() << ((T*)buffer)[i];
+        }
+        qDebug() <<"calculateMin : " << smallest << " : "<< largest;
+        return smallest;
+    }
     template<typename T>
     double getMin() {
-        return *std::min_element((T*)buffer, (T*)buffer+imageSize);
+//        std::vector<T> values((T*)buffer, (T*)buffer+imageSize);
+//        qDebug() << valuse.size();
+        return *std::min_element((T*)buffer, ((T*)buffer)+imageSize);
+//        return *std::min_element(values.begin(), values.end());
     }
 
     template<typename T>
     double getMax() {
-        return *std::max_element((T*)buffer, (T*)buffer+imageSize);
+        return *std::max_element((T*)buffer, ((T*)buffer)+imageSize);
     }
 
 
@@ -129,7 +156,7 @@ struct BioImageData {
         }
     }
 
-    template<typename T, typename F>
+    template<typename F, typename T>
     T* convertFrom() {
         T *result = new T[imageSize];
         F* buff = (F*)buffer;
@@ -292,6 +319,7 @@ struct BioImageData {
             break;
         }
         case UINT16:{
+//            calculateMin<uint16_t>();
             min = getMin<uint16_t>();
             max = getMax<uint16_t>();
             break;
@@ -425,6 +453,11 @@ QString BioImage::info() const
     return data.join('\n');
 }
 
+uint32_t BioImage::byteSize() const
+{
+    return d->byteSize(d->dType);
+}
+
 double BioImage::min() const
 {
     return d->min;
@@ -445,11 +478,33 @@ void *BioImage::data()
   // rather take data in the constructor so we dont screw it up :)
 }*/
 
-/*template<typename T>
-T *BioImage::dataAs()
+
+void *BioImage::dataAs(zeroth::DataType dtype)
 {
 
-}*/
+        switch (dtype) {
+        case UINT8:
+            return d->convert<uint8_t>();
+        case INT8:
+            return d->convert<int8_t>();
+        case UINT16:
+            return d->convert<uint16_t>();
+        case INT16:
+            return d->convert<int16_t>();
+        case UINT32:
+            return d->convert<uint32_t>();
+        case INT32:
+            return d->convert<int32_t>();
+        case FLOAT:
+            return d->convert<float>();
+
+        default :
+            return d->convert<uint8_t>();
+
+        }
+
+
+}
 
 void * BioImage::page(int index)
 {

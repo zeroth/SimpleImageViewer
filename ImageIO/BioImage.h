@@ -46,7 +46,7 @@ public:
 
     QString info() const;
     
-    // uint32_t byteSize() const;
+     uint32_t byteSize() const;
 
     Q_INVOKABLE double min() const;
     Q_INVOKABLE double max() const;
@@ -88,6 +88,7 @@ public:
     BioImage& operator/(const BioImage& other);
     BioImage& operator/(double val);*/
 
+    void *dataAs(zeroth::DataType dtype);
 signals:
     void widthChanged();
     void heightChanged();

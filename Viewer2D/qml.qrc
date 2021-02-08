@@ -20,5 +20,6 @@
         <file>icons/reset_icon.png</file>
         <file>icons/reset.png</file>
         <file>icons/screenshot.png</file>
+        <file>AnisotropyDialog.qml</file>
     </qresource>
 </RCC>

@@ -12,7 +12,7 @@
 #include <QQuickView>
 #include <QQmlDebuggingEnabler>
 #include "ImageManager.h"
-
+#include <Anisotropy.h>
 
 int main(int argc, char *argv[])
 {
@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationDomain("CellphyLab.com");
 
     qmlRegisterUncreatableType<zeroth::BioImage>("BioImages", 1, 0, "BioImage","You can not create BioImage in QML");
+    qmlRegisterType<Anisotropy>("BioImages", 1, 0, "Anisotropy");
     //        qmlRegisterType<Bio2DImageView>("BioImages", 1,0, "BioImage2DViewer");
 //    qmlRegisterType<Anisotropy>("BioImages", 1,0, "Anisotropy");
 //    qmlRegisterType<zeroth::Histogram>("BioImages", 1,0, "Histogram");

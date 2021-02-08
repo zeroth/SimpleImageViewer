@@ -31,6 +31,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     zeroth::BioImage* imageAt(int row);
+    Q_INVOKABLE QString imagePathAt(int row) const;
 
     Q_INVOKABLE int width(int row) {
         return this->imageAt(row)->width();
@@ -64,6 +65,7 @@ public:
     Q_INVOKABLE QStringList availableColorMaps();
     QVector<QRgb> colorTable(const QString &name);
 
+    Q_INVOKABLE void exeAnisotropy(const QString &parallelBackGround, const QString &perpendicularBackground, const QString &parallel, const QString &perpendicular, double subtractVal);
 private: // make it singleton
     ImageManager(QObject *parent = nullptr);
     ///////////////////////////////////////////////////////////

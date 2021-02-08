@@ -15,10 +15,10 @@ ApplicationWindow {
     visible: true
     width: 1200
     height: 800
-//    state: "split"
+    //    state: "split"
 
     //    color: "red"
-//    property int imageSrc: -1
+    //    property int imageSrc: -1
     property var currentViewer: image
     toolBar: ToolBar {
         id: toolBar
@@ -30,6 +30,15 @@ ApplicationWindow {
                     openDlg.open()
                 }
             }
+
+            ToolButton {
+                text: "Anisotropy"
+//                iconSource: "qrc:/icons/open.png"
+                onClicked: {
+                    anisotropyDlg.open()
+                }
+            }
+
             ToolButton {
                 text: "Split"
                 iconSource: "qrc:/icons/toggle.png"
@@ -49,86 +58,88 @@ ApplicationWindow {
     }
 
     Rectangle {
-    id: centerItem
-    anchors.fill: parent
-    state: "normal"
-
-    Rectangle {
-        id: mainRect
-        color: "transparent"
-        visible: centerItem.state === "normal"
+        id: centerItem
         anchors.fill: parent
-        ImageScrollArea {
-            id: image
+        state: "normal"
+
+        Rectangle {
+            // Normal View
+            id: mainRect
+            color: "transparent"
+            visible: centerItem.state === "normal"
             anchors.fill: parent
-            zoomController.visible: true
-            zoomScale: 1
-            imageSrc: -1
-            controlAlignment: Qt.AlignCenter
+            ImageScrollArea {
+                id: image
+                anchors.fill: parent
+                zoomController.visible: true
+                zoomScale: 1
+                imageSrc: -1
+                controlAlignment: Qt.AlignCenter
+            }
+
+            onVisibleChanged: {
+                if(visible) {
+                    appRoot.currentViewer = image
+                } else {
+                    appRoot.currentViewer = imageL
+                }
+            }
+
         }
 
-        onVisibleChanged: {
-            if(visible) {
-                appRoot.currentViewer = image
+        SplitView {
+            // Split View
+            visible: centerItem.state === "split"
+            anchors.fill: parent
+
+            Rectangle {
+                id: leftRect
+                color: "transparent"
+                width: parent.width/2
+                Layout.minimumWidth: parent.width/4
+                height: parent.height
+                ImageScrollArea {
+                    id: imageL
+                    anchors.fill: parent
+                    zoomController.visible: true
+                    zoomScale: 1
+                    imageSrc: -1
+                    controlAlignment: Qt.AlignCenter
+                }
+
+                onActiveFocusChanged: {
+                    appRoot.currentViewer = imageL
+                }
+            }
+            Rectangle {
+                id: rightRect
+                color: "transparent"
+                width: parent.width/2
+                Layout.minimumWidth: parent.width/4
+                height: parent.height
+                ImageScrollArea {
+                    id: imageR
+                    anchors.fill: parent
+                    zoomController.visible: true
+                    zoomScale: 1
+                    imageSrc: -1
+                    controlAlignment: Qt.AlignCenter
+                }
+
+                onActiveFocusChanged: {
+                    appRoot.currentViewer = imageR
+                }
+
+            }
+        }
+
+        onStateChanged: {
+            if(state == "split") {
+                appRoot.currentViewer = imageL
             } else {
-                appRoot.currentViewer = imageL
+                appRoot.currentViewer = image
             }
         }
-
-    }
-
-    SplitView {
-        visible: centerItem.state === "split"
-        anchors.fill: parent
-
-        Rectangle {
-            id: leftRect
-            color: "transparent"
-            width: parent.width/2
-            Layout.minimumWidth: parent.width/4
-            height: parent.height
-            ImageScrollArea {
-                id: imageL
-                anchors.fill: parent
-                zoomController.visible: true
-                zoomScale: 1
-                imageSrc: -1
-                controlAlignment: Qt.AlignCenter
-            }
-
-            onActiveFocusChanged: {
-                appRoot.currentViewer = imageL
-            }
-        }
-        Rectangle {
-            id: rightRect
-            color: "transparent"
-            width: parent.width/2
-            Layout.minimumWidth: parent.width/4
-            height: parent.height
-            ImageScrollArea {
-                id: imageR
-                anchors.fill: parent
-                zoomController.visible: true
-                zoomScale: 1
-                imageSrc: -1
-                controlAlignment: Qt.AlignCenter
-            }
-
-            onActiveFocusChanged: {
-                appRoot.currentViewer = imageR
-            }
-
-        }
-    }
-
-    onStateChanged: {
-        if(state == "split") {
-            appRoot.currentViewer = imageL
-        } else {
-            appRoot.currentViewer = image
-        }
-    }
     }
 
 
@@ -144,6 +155,35 @@ ApplicationWindow {
             appRoot.currentViewer.imageSrc = currentImageId;
         }
     }
+
+    AnisotropyDialog {
+        id: anisotropyDlg
+
+        onAccepted: {
+//            anisotropy.parallelBackGround = anisotropyDlg.parlBgFile
+//            anisotropy.perpendicularBackground = anisotropyDlg.perpBgFile
+//            anisotropy.parallel = anisotropyDlg.parlFile
+//            anisotropy.perpendicular = anisotropyDlg.perpBgFile
+//            anisotropy.subtractVal = anisotropyDlg.subtractValue
+
+//            anisotropy.apply();
+//            var stringData = `import BioImages 1.0;`+
+//                    `Anisotropy{`+
+//                    `parallelBackGround:"${anisotropyDlg.parlBgFile}"; ` +
+//                    `perpendicularBackground: "${anisotropyDlg.perpBgFile}";` +
+//                    `parallel:"${anisotropyDlg.parlFile}";` +
+//                    `perpendicular: "${anisotropyDlg.perpBgFile}";`+
+//                    `subtractVal: ${anisotropyDlg.subtractValue}; }`;
+//            console.log(stringData);
+//            var anisotropy = Qt.createQmlObject(stringData, appRoot, "dynamicSnippetAni")
+//            anisotropy.apply();
+            Manager.exeAnisotropy(anisotropyDlg.parlBgFile, anisotropyDlg.perpBgFile, anisotropyDlg.parlFile, anisotropyDlg.perpFile, anisotropyDlg.subtractValue);
+        }
+    }
+
+//    Anisotropy {
+//        id: anisotropy
+//    }
 
 
 }
